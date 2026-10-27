@@ -10,6 +10,21 @@ const promoted = { entryId: "tweet-sponsored", content: { itemContent: { promote
 const termination = { type: "TimelineTerminateTimeline", direction: "Bottom" };
 const instructions = [{ type: "TimelineAddEntries", entries: [organic, promoted, cursor] }, termination];
 
+test("native plugin only blocks the exact observed measurement host without MITM", () => {
+  assert.equal(config.nativeHost, "ads-api.twitter.com");
+  assert.equal(new URL("https://ads-api.twitter.com/12/measurement/dcm_local_id").hostname, config.nativeHost);
+  for (const url of [
+    "https://ads-api.twitter.com.example.org/12/measurement/dcm_local_id",
+    "https://api.twitter.com/graphql/synthetic_query/HomeTimeline",
+    "https://twitter.com/i/api/graphql/synthetic_query/HomeTimeline",
+    "https://x.com/account/authenticate_web_view",
+    "https://video.twimg.com/amplify_video/synthetic/pl/video.m3u8",
+    "https://video.twimg.com/ext_tw_video/synthetic/pu/vid/video.mp4",
+    "https://abs.twimg.com/responsive-web/client-web/main.js",
+    "https://grok.com/commerce.prepurchase.v1.PrePurchaseService/CreateCheckoutSession",
+  ]) assert.notEqual(new URL(url).hostname, config.nativeHost);
+});
+
 function wrap(operation, items = instructions) {
   const timeline = { instructions: items };
   switch (operation) {

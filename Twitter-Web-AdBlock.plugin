@@ -1,0 +1,14 @@
+#!name=X（推特）信息流过滤（实验版）
+#!desc=仅在可解密的连接中尝试过滤已知 GraphQL 推广条目。需要 MITM；原生 App 尚未验证，开启后加载失败请禁用。
+#!author=shuzhiweb
+#!homepage=https://github.com/shuzhiweb/loon-ad/blob/main/docs/Twitter.md
+
+[Rewrite]
+^https?:\/\/ads-api\.twitter\.com\/12\/measurement\/dcm_local_id(?:\?.*)?$ reject-dict
+
+[Script]
+http-response ^https?:\/\/(?:api\.)?(?:twitter|x)\.com\/(?:i\/api\/)?graphql\/[A-Za-z0-9_-]+\/(?:HomeTimeline|HomeLatestTimeline|TweetDetail|SearchTimeline|UserTweets|UserTweetsAndReplies|UserMedia|ListLatestTweetsTimeline)(?:\?.*)?$ requires-body=true,script-path=https://raw.githubusercontent.com/shuzhiweb/loon-ad/main/scripts/twitter-timeline.js,timeout=10,tag=X推广信息流过滤
+
+[MITM]
+hostname = ads-api.twitter.com, api.twitter.com, api.x.com, twitter.com, x.com
+h2 = true

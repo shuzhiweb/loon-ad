@@ -1,6 +1,6 @@
 # 哔哩哔哩 Loon 开屏与广告追踪过滤
 
-本仓库也包含独立的 [X（推特）去广告插件及安装说明](docs/Twitter.md)，文件名为 `Twitter-AdBlock.plugin`。以下内容是 B 站插件说明。
+本仓库也包含独立的 [X（推特）插件及安装说明](docs/Twitter.md)：`Twitter-AdBlock.plugin` 为免解密的广告追踪拦截，`Twitter-Web-AdBlock.plugin` 为需要 MITM 的实验性信息流过滤。前者不能移除推广卡片，后者未验证原生 App 支持。以下内容是 B 站插件说明。
 
 根据用户提供的手机 B 站 HAR 编写的 Loon 插件：移除 B 站开屏接口响应中的广告字段，并屏蔽抓包中出现的两个 Tanx 广告追踪域名。
 

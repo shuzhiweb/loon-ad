@@ -7,7 +7,11 @@ const root = path.resolve(__dirname, "..");
 const source = fs.readFileSync(path.join(root, "scripts/twitter-timeline.js"), "utf8");
 
 function loadPlugin() {
-  const text = fs.readFileSync(path.join(root, "Twitter-AdBlock.plugin"), "utf8");
+  const nativeText = fs.readFileSync(path.join(root, "Twitter-AdBlock.plugin"), "utf8");
+  const nativeLines = nativeText.split("\n").map(line => line.trim()).filter(line => line && !line.startsWith("#"));
+  assert.deepEqual(nativeLines, ["[Rule]", "DOMAIN,ads-api.twitter.com,REJECT"]);
+  const nativeHost = nativeLines[1].split(",")[1];
+  const text = fs.readFileSync(path.join(root, "Twitter-Web-AdBlock.plugin"), "utf8");
   const sections = {};
   for (const key of ["name", "desc", "author", "homepage"]) {
     assert.ok(text.split("\n").some(line => line.startsWith(`#!${key}=`)));
@@ -36,7 +40,7 @@ function loadPlugin() {
   assert.deepEqual(sections["[MITM]"], [
     "hostname = ads-api.twitter.com, api.twitter.com, api.x.com, twitter.com, x.com", "h2 = true",
   ]);
-  return { tracking: new RegExp(tracking), timeline: new RegExp(timeline) };
+  return { tracking: new RegExp(tracking), timeline: new RegExp(timeline), nativeHost };
 }
 
 function runScript(url, body, overrides = {}) {
@@ -55,14 +59,16 @@ function replayHar(harPath, config) {
   const counts = {
     entries: har.log.entries.length, trackingMatched: 0, timelineMatched: 0,
     timelineModified: 0, missingTimelineBodies: 0, unchanged: 0,
-    mediaHostUnmatched: 0, staticHostUnmatched: 0,
+    mediaHostUnmatched: 0, staticHostUnmatched: 0, nativeDomainMatched: 0,
   };
   for (const entry of har.log.entries) {
     const url = entry.request.url;
     const host = new URL(url).hostname;
     const tracking = config.tracking.test(url);
     const timeline = config.timeline.test(url);
-    assert.ok(!((host === "video.twimg.com" || host === "abs.twimg.com") && (tracking || timeline)));
+    const native = host === config.nativeHost;
+    assert.ok(!((host === "video.twimg.com" || host === "abs.twimg.com") && (tracking || timeline || native)));
+    counts.nativeDomainMatched += Number(native);
     counts.trackingMatched += Number(tracking);
     counts.timelineMatched += Number(timeline);
     if (timeline) {
@@ -73,7 +79,7 @@ function replayHar(harPath, config) {
       const result = runScript(url, body, { status: entry.response.status, headers });
       counts.timelineModified += Number(typeof result.body === "string");
     }
-    if (!tracking && !timeline) {
+    if (!tracking && !timeline && !native) {
       counts.unchanged++;
       counts.mediaHostUnmatched += Number(host === "video.twimg.com");
       counts.staticHostUnmatched += Number(host === "abs.twimg.com");
