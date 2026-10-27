@@ -11,10 +11,10 @@
 在 Loon 的「插件」中添加下面的 URL，下载并启用插件，然后使用分流模式：
 
 ```text
-https://raw.githubusercontent.com/shuzhiweb/loon-ad-bilibili/main/Bilibili-AdBlock.plugin
+https://raw.githubusercontent.com/shuzhiweb/loon-ad/main/Bilibili-AdBlock.plugin
 ```
 
-[一键导入 Loon](https://www.nsloon.com/openloon/import?plugin=https%3A%2F%2Fraw.githubusercontent.com%2Fshuzhiweb%2Floon-ad-bilibili%2Fmain%2FBilibili-AdBlock.plugin)
+[一键导入 Loon](https://www.nsloon.com/openloon/import?plugin=https%3A%2F%2Fraw.githubusercontent.com%2Fshuzhiweb%2Floon-ad%2Fmain%2FBilibili-AdBlock.plugin)
 
 这是插件地址，请添加到「插件」，不要当作节点订阅或完整配置导入。开屏过滤需要在 Loon 的 MITM 设置中**开启 HTTPS 解密、安装证书**，并在 iOS「设置 > 通用 > 关于本机 > 证书信任设置」中信任该证书。插件会为三个 App API 主机声明 MITM，不需要替换你的完整配置。完全退出并重新打开 B 站后，可在 Loon 请求日志中检查脚本是否执行。禁用或删除插件即可恢复。
 

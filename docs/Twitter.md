@@ -7,10 +7,10 @@
 在 Loon「插件」中添加并启用：
 
 ```text
-https://raw.githubusercontent.com/shuzhiweb/loon-ad-bilibili/main/Twitter-AdBlock.plugin
+https://raw.githubusercontent.com/shuzhiweb/loon-ad/main/Twitter-AdBlock.plugin
 ```
 
-[一键导入 Loon](https://www.nsloon.com/openloon/import?plugin=https%3A%2F%2Fraw.githubusercontent.com%2Fshuzhiweb%2Floon-ad-bilibili%2Fmain%2FTwitter-AdBlock.plugin)
+[一键导入 Loon](https://www.nsloon.com/openloon/import?plugin=https%3A%2F%2Fraw.githubusercontent.com%2Fshuzhiweb%2Floon-ad%2Fmain%2FTwitter-AdBlock.plugin)
 
 开启 Loon 的 MITM / HTTPS 解密，安装证书，并在 iOS「设置 > 通用 > 关于本机 > 证书信任设置」中信任。插件声明解密的主机是 `ads-api.twitter.com`、`api.twitter.com`、`api.x.com`、`twitter.com`、`x.com`。插件下载脚本后，完全退出 X 再重新打开，刷新信息流；不要把插件地址添加到节点订阅。
 

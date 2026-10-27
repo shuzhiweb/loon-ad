@@ -1,7 +1,7 @@
 #!name=哔哩哔哩去广告（开屏与追踪）
 #!desc=移除已知开屏接口的广告字段，并拦截两个 Tanx 追踪域名。开屏过滤需要开启 MITM、安装并信任证书。
 #!author=shuzhiweb
-#!homepage=https://github.com/shuzhiweb/loon-ad-bilibili
+#!homepage=https://github.com/shuzhiweb/loon-ad
 
 [Rule]
 # 本次 HAR 观察到 GET /spf3，返回 image/gif。
@@ -10,7 +10,7 @@ DOMAIN,df.tanx.com,REJECT
 DOMAIN,ef-dongfeng.tanx.com,REJECT
 
 [Script]
-http-response ^https?:\/\/(app\.bilibili\.com|app\.biliapi\.net|app\.biliapi\.com)\/x\/v2\/splash\/(show|list|brand\/list|event\/list2)(?:\?.*)?$ requires-body=true,script-path=https://raw.githubusercontent.com/shuzhiweb/loon-ad-bilibili/main/scripts/bilibili-splash.js,timeout=10,tag=哔哩哔哩开屏去广告
+http-response ^https?:\/\/(app\.bilibili\.com|app\.biliapi\.net|app\.biliapi\.com)\/x\/v2\/splash\/(show|list|brand\/list|event\/list2)(?:\?.*)?$ requires-body=true,script-path=https://raw.githubusercontent.com/shuzhiweb/loon-ad/main/scripts/bilibili-splash.js,timeout=10,tag=哔哩哔哩开屏去广告
 
 [MITM]
 hostname = app.bilibili.com, app.biliapi.net, app.biliapi.com

@@ -32,7 +32,7 @@ function loadPlugin() {
   assert.equal(action, "reject-dict");
   const [type, timeline, options] = sections["[Script]"][0].split(/\s+/);
   assert.equal(type, "http-response");
-  assert.equal(options, "requires-body=true,script-path=https://raw.githubusercontent.com/shuzhiweb/loon-ad-bilibili/main/scripts/twitter-timeline.js,timeout=10,tag=X推广信息流过滤");
+  assert.equal(options, "requires-body=true,script-path=https://raw.githubusercontent.com/shuzhiweb/loon-ad/main/scripts/twitter-timeline.js,timeout=10,tag=X推广信息流过滤");
   assert.deepEqual(sections["[MITM]"], [
     "hostname = ads-api.twitter.com, api.twitter.com, api.x.com, twitter.com, x.com", "h2 = true",
   ]);

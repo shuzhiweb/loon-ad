@@ -50,7 +50,7 @@ def load_rules():
         raise ValueError("Expected tracking rules, one splash script, and MITM")
     if not script_lines[0].startswith("http-response ") or "requires-body=true" not in script_lines[0]:
         raise ValueError("Expected a response script with body access")
-    script_path = "https://raw.githubusercontent.com/shuzhiweb/loon-ad-bilibili/main/scripts/bilibili-splash.js"
+    script_path = "https://raw.githubusercontent.com/shuzhiweb/loon-ad/main/scripts/bilibili-splash.js"
     if f"script-path={script_path}," not in script_lines[0]:
         raise ValueError("Unexpected script location")
     expected_mitm = {
