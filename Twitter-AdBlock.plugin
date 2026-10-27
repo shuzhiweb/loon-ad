@@ -1,0 +1,14 @@
+#!name=X（推特）去广告
+#!desc=过滤已知 GraphQL 信息流中的推广条目，精确拦截抓包发现的广告测量接口。需开启 MITM 并信任证书；信息流过滤尚无本机抓包阳性验证。
+#!author=shuzhiweb
+#!homepage=https://github.com/shuzhiweb/loon-ad-bilibili/blob/main/docs/Twitter.md
+
+[Rewrite]
+^https?:\/\/ads-api\.twitter\.com\/12\/measurement\/dcm_local_id(?:\?.*)?$ reject-dict
+
+[Script]
+http-response ^https?:\/\/(?:api\.)?(?:twitter|x)\.com\/(?:i\/api\/)?graphql\/[A-Za-z0-9_-]+\/(?:HomeTimeline|HomeLatestTimeline|TweetDetail|SearchTimeline|UserTweets|UserTweetsAndReplies|UserMedia|ListLatestTweetsTimeline)(?:\?.*)?$ requires-body=true,script-path=https://raw.githubusercontent.com/shuzhiweb/loon-ad-bilibili/main/scripts/twitter-timeline.js,timeout=10,tag=X推广信息流过滤
+
+[MITM]
+hostname = ads-api.twitter.com, api.twitter.com, api.x.com, twitter.com, x.com
+h2 = true
