@@ -1,0 +1,9 @@
+# 抓包与凭据仅在本地分析，禁止入库。
+*.har
+*.har.*
+*.pcap
+*.pcapng
+.env
+.env.*
+__pycache__/
+.DS_Store

@@ -1,0 +1,10 @@
+#!name=哔哩哔哩广告追踪拦截（抓包版）
+#!desc=拦截本次 B 站抓包中出现的两个 Tanx 广告追踪域名；不包含开屏、首页信息流或视频内广告过滤。无需 MITM。
+#!author=shuzhiweb
+#!homepage=https://github.com/shuzhiweb/loon-ad-bilibili
+
+[Rule]
+# 本次 HAR 观察到 GET /spf3，返回 image/gif。
+DOMAIN,df.tanx.com,REJECT
+# 本次 HAR 观察到 GET /tanx，返回 image/gif。
+DOMAIN,ef-dongfeng.tanx.com,REJECT
