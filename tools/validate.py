@@ -17,14 +17,24 @@ def load_rules():
             raise ValueError(f"Missing plugin metadata: {key}")
     hosts = set()
     section = None
+    sections = set()
+    script_lines = []
+    mitm_lines = []
     for line in text.splitlines():
         line = line.strip()
         if not line or line.startswith("#"):
             continue
         if line.startswith("["):
-            if line != "[Rule]" or section is not None:
-                raise ValueError("Expected a single [Rule] section")
+            if line not in {"[Rule]", "[Script]", "[MITM]"} or line in sections:
+                raise ValueError("Unexpected or duplicate section")
+            sections.add(line)
             section = line
+            continue
+        if section == "[Script]":
+            script_lines.append(line)
+            continue
+        if section == "[MITM]":
+            mitm_lines.append(line)
             continue
         if section != "[Rule]":
             raise ValueError("Rule outside [Rule]")
@@ -36,6 +46,18 @@ def load_rules():
         hosts.add(parts[1])
     if hosts != EXPECTED_HOSTS:
         raise ValueError("Unexpected blocking scope; review domain changes")
+    if sections != {"[Rule]", "[Script]", "[MITM]"} or len(script_lines) != 1:
+        raise ValueError("Expected tracking rules, one splash script, and MITM")
+    if not script_lines[0].startswith("http-response ") or "requires-body=true" not in script_lines[0]:
+        raise ValueError("Expected a response script with body access")
+    script_path = "https://raw.githubusercontent.com/shuzhiweb/loon-ad-bilibili/main/scripts/bilibili-splash.js"
+    if f"script-path={script_path}," not in script_lines[0]:
+        raise ValueError("Unexpected script location")
+    expected_mitm = {
+        "hostname = app.bilibili.com, app.biliapi.net, app.biliapi.com", "h2 = true"
+    }
+    if set(mitm_lines) != expected_mitm:
+        raise ValueError("Unexpected MITM scope")
     return hosts
 
 
